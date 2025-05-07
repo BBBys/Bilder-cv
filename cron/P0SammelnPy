@@ -1,0 +1,2 @@
+#!/bin/sh
+/usr/local/bilder/00sammeln/.env/bin/python /usr/local/bilder/00sammeln/P0sammeln.py
