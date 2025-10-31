@@ -32,8 +32,7 @@ def EinträgeWiederherstellen(db):
         cursor.execute(SQL)
     db.commit()
     raise Exception(
-        "Tabelle %s Einträge %s erzeugt - Neustart notwendig"
-        % (DBTBB, TITEL)
+        "Tabelle %s Einträge %s erzeugt - Neustart notwendig" % (DBTBB, TITEL)
     )
     # endet hier
 
@@ -49,8 +48,8 @@ def main(pfad):
     """
     try:
         mydb = mysql.connector.connect(
-            host=DBHOST, db=DBNAME, user=DBUSER, port=DBPORT, password=DBPWD
-        )  # + ";ConvertZeroDateTime=True;",
+            host=DBHOST, db=DBNAME, user=DBUSER, port=DBPORT, \
+                password=DBPWD       )  # + ";ConvertZeroDateTime=True;",
         if ZURÜCK:
             logging.info("Zurücksetzen")
             zurücksetzenBilder(TITEL, mydb)
@@ -96,9 +95,9 @@ def main(pfad):
             case 1146:
                 dbcreate(mydb, e.msg)
             case _:
-                logging.fatal(e)
+                logging.exception(e)
     except Exception as e:
-        logging.fatal(e)
+        logging.exception(e)
     finally:
         mydb.close()
     return 0
@@ -107,6 +106,8 @@ def main(pfad):
 if __name__ == "__main__":
     import sys
 
+    #LOG_FORMAT = "%(asctime)s %(name)s %(levelname)s %(message)s"
+    LOG_FORMAT = "%(name)s %(levelname)s %(message)s"
     parser = argparse.ArgumentParser(
         prog=TITEL, description="Bilder suchen und in DB schreiben"
     )
@@ -114,8 +115,11 @@ if __name__ == "__main__":
         "pfad",
         nargs="?",
         default=VERARBEITEN,
-        help="optional: Pfad in DB, dann keine Verarbeitung",
+        help="optional: Pfad\n"
+        "- wenn angegeben: wird in DB eingetragen und Programm endet\n"
+        "und Pfad wird beim nächsten Aufruf für Suche verwendet",
     )
+
     parser.add_argument(
         "-v",
         "--verbose",
@@ -135,9 +139,10 @@ if __name__ == "__main__":
     ZURÜCK = arguments.pZurck
     Dbg = arguments.pVerbose
     if Dbg:
-        logging.basicConfig(level=logging.DEBUG)
+        LOG_LEVEL = logging.DEBUG
     else:
-        logging.basicConfig(level=logging.INFO)
+        LOG_LVEL = logging.INFO
+    logging.basicConfig(format=LOG_FORMAT, level=LOG_LEVEL)
     logging.info("Start %s: %s" % (TITEL, pfad))
 
     sys.exit(main(pfad))

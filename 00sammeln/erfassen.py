@@ -15,9 +15,7 @@ def erfassen(ausgangspfad, db, titel):
             for filename in files:
                 name, ext = os.path.splitext(filename)
                 if ext in exts:
-                    logging.debug(
-                        f"bearbeiten:erfassen:{pfad}, {name}, {ext}"
-                    )
+                    logging.debug(f"bearbeiten:erfassen:{pfad}, {name}, {ext}")
                     sql = f"INSERT INTO {DBTBILDER} (pfad,name,ext) VALUES ('{pfad}', '{name}', '{ext}');"
                     cursor.execute(sql)
             for dir in dirs:

@@ -43,24 +43,6 @@ def zurücksetzenDaten(titel, db):
     logging.info("...zurückgesetzt")
 
 
-def pfadEintragen(db, titel, pfad):
-    """Pfad in die Tabelle eintragen
-
-    Args:
-        db (MySQL-Connection): DB-Verbindung
-        pfad (string): Pfad mit / am Ende
-
-    Returns:
-        string: Meldung
-    """
-    with db.cursor() as cursor:
-        sql = f"INSERT INTO {DBTBB} (programm,parameter) VALUES ('{titel}','{pfad}')"
-        logging.debug(sql)
-        cursor.execute(sql)
-    db.commit()
-    return "Pfad eingetragen"
-
-
 def dbcreate(db, errtext):
     """erzeugt eine fehlende Tabelle
 
