@@ -3,19 +3,20 @@
 #
 #  Analysieren.py
 #
-#    Fotos analysieren  
+#    Fotos analysieren
 # (c) 2025 by Bernd-Burkhard Borys
 # licensed under CC BY-NC-SA 4.0.
 # To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 import mysql.connector
 import logging, argparse
-from dbroutinen import dbcreate,  zurücksetzenBilder
+from dbroutinen import dbcreate
 from dbparam import *
-from datetime import date, datetime, timedelta
+from bilderanalysieren import bilderAnalysieren
 
 TITEL = "P10Analysieren"
 VERSION = "V0"
+
 
 def main():
     """Hauptprogramm
@@ -27,18 +28,17 @@ def main():
     """
     try:
         mydb = mysql.connector.connect(
-            host=DBHOST, db=DBNAME, user=DBUSER, port=DBPORT, \
-                password=DBPWD       )  # + ";ConvertZeroDateTime=True;",
+            host=DBHOST, db=DBNAME, user=DBUSER, port=DBPORT, password=DBPWD
+        )  # + ";ConvertZeroDateTime=True;",
         if ZURÜCK:
             # Code zum Zurücksetzen
             logging.info("Zurücksetzen")
-            #zurücksetzenBilder(TITEL, mydb)
+            # zurücksetzenBilder(TITEL, mydb)
             logging.info("...zurückgesetzt, Ende")
             return 0
 
-        
         logging.info(f"{TITEL}: Start Analyse")
-        ok = analysieren(mydb, TITEL)
+        ok = bilderAnalysieren(mydb, TITEL)
         if ok:
             logging.info(f"{TITEL}: Analyse erfolgreich")
         else:
@@ -63,11 +63,9 @@ def main():
 if __name__ == "__main__":
     import sys
 
-    #LOG_FORMAT = "%(asctime)s %(name)s %(levelname)s %(message)s"
+    # LOG_FORMAT = "%(asctime)s %(name)s %(levelname)s %(message)s"
     LOG_FORMAT = "%(name)s %(levelname)s %(message)s"
-    parser = argparse.ArgumentParser(
-        prog=TITEL, description="Bilder analysieren "
-    )
+    parser = argparse.ArgumentParser(prog=TITEL, description="Bilder analysieren ")
     parser.add_argument(
         "-v",
         "--verbose",
@@ -85,8 +83,10 @@ if __name__ == "__main__":
     arguments = parser.parse_args()
     ZURÜCK = arguments.pZurck
     Dbg = arguments.pVerbose
-    if Dbg:        LOG_LEVEL = logging.DEBUG
-    else:          LOG_LVEL = logging.INFO
+    if Dbg:
+        LOG_LEVEL = logging.DEBUG
+    else:
+        LOG_LEVEL = logging.INFO
     logging.basicConfig(format=LOG_FORMAT, level=LOG_LEVEL)
     logging.info("Start %s" % (TITEL))
 
