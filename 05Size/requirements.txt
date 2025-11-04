@@ -1,0 +1,7 @@
+mysql-connector-python
+logging
+argparse
+black
+opencv-contrib-python
+#dautil
+#matplotlib
