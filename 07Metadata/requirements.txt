@@ -1,0 +1,8 @@
+mysql-connector-python
+logging
+argparse
+black
+ExifRead
+#opencv-contrib-python
+#dautil
+#matplotlib

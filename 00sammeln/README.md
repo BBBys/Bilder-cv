@@ -1,6 +1,9 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 # FotosSammeln
 
-Sammelt Dateinamen in Datenbank
+Sammelt Dateinamen in Datenbank - zur Vorbereitug einer Bildanalyse mit OpenCV
+## Aufruf
+``` 
+python FotosSammeln.py -v -z [Pfad]
+```
 
-Zur Vorbereitug einer Bildanalyse mit OpenCV

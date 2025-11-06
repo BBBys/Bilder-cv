@@ -17,7 +17,10 @@ from datetime import date, datetime, timedelta
 TITEL = "P0Sammeln"
 VERSION = "V0"
 VERARBEITEN = "verarbeiten!"
-
+DESCRIPTION="""Bilder suchen und in DB schreiben. \n
+Wo Bilder gesucht werden, steht in der Auftrags-Datenbank. \n
+Aufträge werden erstellt, indem beim Aufruf ein Pfad angegeben wird. \n
+Ohne Pfadangabe wird der nächste anstehende Auftrag aufgführt."""
 
 def EinträgeWiederherstellen(db):
     """stellt fehlende Aufträge wieder her
@@ -48,8 +51,8 @@ def main(pfad):
     """
     try:
         mydb = mysql.connector.connect(
-            host=DBHOST, db=DBNAME, user=DBUSER, port=DBPORT, \
-                password=DBPWD       )  # + ";ConvertZeroDateTime=True;",
+            host=DBHOST, db=DBNAME, user=DBUSER, port=DBPORT, password=DBPWD
+        )  # + ";ConvertZeroDateTime=True;",
         if ZURÜCK:
             logging.info("Zurücksetzen")
             zurücksetzenBilder(TITEL, mydb)
@@ -106,18 +109,17 @@ def main(pfad):
 if __name__ == "__main__":
     import sys
 
-    #LOG_FORMAT = "%(asctime)s %(name)s %(levelname)s %(message)s"
+    # LOG_FORMAT = "%(asctime)s %(name)s %(levelname)s %(message)s"
     LOG_FORMAT = "%(name)s %(levelname)s %(message)s"
     parser = argparse.ArgumentParser(
-        prog=TITEL, description="Bilder suchen und in DB schreiben"
-    )
+        prog=TITEL, description=DESCRIPTION)
     parser.add_argument(
         "pfad",
         nargs="?",
         default=VERARBEITEN,
         help="optional: Pfad\n"
-        "- wenn angegeben: wird in DB eingetragen und Programm endet\n"
-        "und Pfad wird beim nächsten Aufruf für Suche verwendet",
+        "- wenn angegeben: Pfad wird als Auftrag in DB eingetragen\n"
+        "- wenn nicht angegeben: nächster wird ausgeführt",
     )
 
     parser.add_argument(
@@ -137,11 +139,8 @@ if __name__ == "__main__":
     arguments = parser.parse_args()
     pfad = arguments.pfad
     ZURÜCK = arguments.pZurck
-    Dbg = arguments.pVerbose
-    if Dbg:
-        LOG_LEVEL = logging.DEBUG
-    else:
-        LOG_LVEL = logging.INFO
+    if arguments.pVerbose: LOG_LEVEL = logging.DEBUG
+    else: LOG_LEVEL = logging.INFO
     logging.basicConfig(format=LOG_FORMAT, level=LOG_LEVEL)
     logging.info("Start %s: %s" % (TITEL, pfad))
 
